@@ -40,9 +40,11 @@
         h1 { 
             color: #d25353; 
             font-family: serif; 
-            font-size: 0.9em; /* Much smaller so "Dugh Classic" doesn't overflow */
+            font-size: 1em;          /* Dropped from 1.25em to 1em to fit one line */
             margin: 0;
-            line-height: 1;
+            white-space: nowrap;     /* This forces the text to stay on one line */
+            letter-spacing: 0.5px;   /* Slight spacing for elegance */
+            margin-bottom: 5px;
         }
 
         h2, p { 
