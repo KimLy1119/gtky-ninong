@@ -7,15 +7,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins&family=Anonymous+Pro&display=swap" rel="stylesheet">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
-        (function(){ emailjs.init("r9MBoUME4VUuwmJ_W"); })();
+        (function(){ emailjs.init("r9MBoUME4VUuwm_W"); })();
     </script>
-   <style>
+    <style>
         body, html {
             margin: 0; padding: 0; height: 100%; width: 100%;
-            background-color: #fdf6e3; /* Matches your cream background color */
+            background-color: #fdf6e3; 
+            /* Make sure your NEW tall image is named Image_bg.png on GitHub */
             background-image: url('Image_bg.png'); 
-            background-size: contain; /* Keeps the correct shape of the image */
-            background-repeat: no-repeat;
+            background-size: cover; 
             background-position: center;
             display: flex;
             justify-content: center; 
@@ -24,69 +24,68 @@
         }
 
         .content-overlay {
-            /* This box now matches the shape of your yellow frame better */
-            width: 45%; 
-            min-width: 180px;
+            width: 85%; 
+            max-width: 380px;
             text-align: center;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 10;
-            /* Pulls the text up into the yellow frame based on the image size */
-            margin-top: -2%; 
+            /* With a tall 1080x1920 BG, 0 margin usually centers it perfectly in the yellow box */
+            margin-top: 0; 
         }
 
-        h1 { color: #d25353; font-family: serif; font-size: 1.2em; margin: 0; }
+        h1 { color: #d25353; font-family: serif; font-size: 1.8em; margin: 0; }
 
         h2, p { 
             color: #1b1b1d; 
             font-family: 'Poppins', sans-serif; 
-            font-size: 0.7em; /* Small font to fit the inner frame */
-            line-height: 1.2;
-            margin: 4px 0;
+            font-size: 0.95em;
+            line-height: 1.4;
+            margin: 8px 0;
         }
 
-        h4 { font-size: 0.5em; color: #888; text-transform: uppercase; margin: 0; }
+        h4 { font-size: 0.7em; color: #888; text-transform: uppercase; margin: 0; }
 
         input {
-            width: 80%; padding: 5px; border: 1px solid #ccc; border-radius: 5px;
+            width: 85%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;
             font-family: 'Poppins', sans-serif;
             font-size: 16px; 
         }
 
         .start-btn, .submit-btn {
-            margin-top: 5px;
-            padding: 4px 10px;
+            margin-top: 10px;
+            padding: 8px 18px;
             font-family: 'Anonymous Pro', monospace; 
             background: white;
             border: 1px solid #1b1b1d;
             cursor: pointer;
-            font-size: 0.8em;
+            font-size: 1em;
         }
 
         .choice-btn {
-            width: 90%; margin: 2px 0; padding: 5px;
+            width: 100%; margin: 5px 0; padding: 10px;
             font-family: 'Poppins', sans-serif; font-weight: bold;
             background: white; border: 1px solid #d25353; cursor: pointer;
-            font-size: 0.7em;
+            font-size: 0.9em;
+            border-radius: 5px;
         }
 
         #next-btn {
             background: #d25353; color: white; border: none;
-            padding: 5px 10px; border-radius: 5px; cursor: pointer; margin-top: 5px;
+            padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 10px;
         }
 
         .hidden { display: none !important; }
 
-        /* Fix for the end screen background */
+        /* End screen background styling */
         #page-body[style*="Image_bg_end.png"] {
-            background-size: contain !important;
+            background-size: cover !important;
         }
     </style>
 </head>
 <body id="page-body">
-
 
     <div class="content-overlay">
         <div id="intro-screen">
@@ -95,37 +94,32 @@
             <button class="start-btn" onclick="startApp()">Start</button>
         </div>
 
-
         <div id="category-splash" class="hidden">
             <h1 id="splash-title"></h1>
             <button class="start-btn" onclick="startCategory()">Tap to Start</button>
         </div>
 
-
         <div id="question-area" class="hidden">
             <h4 id="category-label"></h4>
             <h2 id="question-text"></h2>
-           
+            
             <div id="input-container">
                 <input type="text" id="answerInput" placeholder="Type here...">
                 <br>
                 <button class="submit-btn" onclick="submitAnswer()">Submit</button>
             </div>
 
-
             <div id="choice-container" class="hidden">
                 <button id="choice1" class="choice-btn" onclick="submitChoice(this.innerText)"></button>
                 <button id="choice2" class="choice-btn" onclick="submitChoice(this.innerText)"></button>
             </div>
 
-
             <div id="conversation-box" class="hidden">
-                <p id="p1-display" style="color: #53c997; font-weight: bold; font-size: 0.9em; margin: 2px;"></p>
-                <p id="p2-display" style="color: #53c997; font-weight: bold; font-size: 0.9em; margin: 2px;"></p>
+                <p id="p1-display" style="color: #53c997; font-weight: bold; font-size: 0.85em; margin: 4px;"></p>
+                <p id="p2-display" style="color: #53c997; font-weight: bold; font-size: 0.85em; margin: 4px;"></p>
                 <button id="next-btn" onclick="nextQuestion()">Next Card →</button>
             </div>
         </div>
-
 
         <div id="final-section" class="hidden">
             <h2>Wish you all the best, ninong! 👑</h2>
@@ -140,11 +134,9 @@
         </div>
     </div>
 
-
 <script>
     let current = 0;
     let allResults = [];
-
 
     const questions = [
         { cat: "Dugh Classic", sub: "Warm up muna!", q: "What is your favorite color?", p2: "Yellow and red" },
@@ -160,7 +152,7 @@
         { cat: "Dugh Self", sub: "Something deep hihi", q: "Dream destination in the PH?", p2: "Palawan" },
         { cat: "Dugh Self", sub: "Something deep hihi", q: "People you vibe with?", p2: "Funny people" },
         { cat: "Dugh Self", sub: "Something deep hihi", q: "Biggest pet peeve?", p2: "People with a superiority complex" },
-        { cat: "Dugh Self", sub: "Something deep hihi", q: "What something that resonate with you?", p2: "Plant, just like plants, there are different versions of me every season." },
+        { cat: "Dugh Self", sub: "Something deep hihi", q: "What something that resonate with you?", p2: "Plant; just like plants, there are different versions of me every season." },
         { cat: "Dugh Self", sub: "Something deep hihi", q: "What are you passionate about?", p2: "Learning something new" },
         { cat: "Dis or Dat", sub: "Last few na", q: "Sponty or planned?", p2: "sponty", choices: ["Sponty", "Planned"] },
         { cat: "Dis or Dat", sub: "Last few na", q: "Yapper or listener?", p2: "listener", choices: ["Yapper", "Listener"] },
@@ -168,12 +160,10 @@
         { id: "food_choice", cat: "Dis or Dat", sub: "Last few na", q: "Sweets or savory food?", p2: "Sweets", choices: ["Sweets", "Savory food"] }
     ];
 
-
     function startApp() {
         document.getElementById("intro-screen").classList.add("hidden");
         showSplash();
     }
-
 
     function showSplash() {
         document.getElementById("category-splash").classList.remove("hidden");
@@ -181,20 +171,18 @@
         document.getElementById("splash-title").innerHTML = questions[current].cat + "<br><small style='font-size:0.4em; color:gray;'>" + questions[current].sub + "</small>";
     }
 
-
     function startCategory() {
         document.getElementById("category-splash").classList.add("hidden");
         document.getElementById("question-area").classList.remove("hidden");
         showCard();
     }
 
-
     function showCard() {
         const item = questions[current];
         document.getElementById("category-label").innerText = item.cat;
         document.getElementById("question-text").innerText = item.q;
         document.getElementById("conversation-box").classList.add("hidden");
-       
+        
         if (item.choices) {
             document.getElementById("input-container").classList.add("hidden");
             document.getElementById("choice-container").classList.remove("hidden");
@@ -207,7 +195,6 @@
         }
     }
 
-
     function submitChoice(val) {
         if (questions[current].id === "food_choice") {
             const type = val === "Sweets" ? "sweet" : "savory";
@@ -217,7 +204,6 @@
         submitAnswer();
     }
 
-
     function submitAnswer() {
         const ans = document.getElementById("answerInput").value;
         if (!ans) return;
@@ -226,7 +212,6 @@
         document.getElementById("p2-display").innerText = "Nanak Kim 💛: " + questions[current].p2;
         allResults.push(`Q: ${questions[current].q}\nA: ${ans}`);
     }
-
 
     function nextQuestion() {
         current++;
@@ -239,14 +224,12 @@
         }
     }
 
-
     function sendFinalLetter() {
         const msg = document.getElementById("finalMessage").value;
         allResults.push(`FINAL MESSAGE: ${msg || "None"}`);
         emailjs.send('service_ihyshde', 'template_6groaig', { all_answers: allResults.join("\n\n") })
             .then(() => showFinalScreen()).catch(() => showFinalScreen());
     }
-
 
     function showFinalScreen() {
         const body = document.getElementById("page-body");
