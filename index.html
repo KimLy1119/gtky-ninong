@@ -12,8 +12,9 @@
    <style>
         body, html {
             margin: 0; padding: 0; height: 100%; width: 100%;
+            background-color: #fdf6e3; /* Matches your cream background color */
             background-image: url('image_f24b8d.png'); 
-            background-size: 100% 100%; /* Forces the whole image to fit the screen */
+            background-size: contain; /* Keeps the correct shape of the image */
             background-repeat: no-repeat;
             background-position: center;
             display: flex;
@@ -22,74 +23,65 @@
             overflow: hidden;
         }
 
-        /* The box that holds your text */
         .content-overlay {
-            width: 80%; /* Shrinks the width so it stays inside the yellow frame on mobile */
-            max-width: 320px; 
-            height: auto;
-            min-height: 250px;
-            /* These margins align the text specifically with your yellow box image */
-            margin-top: -15%; 
-            margin-left: -2%;
+            /* This box now matches the shape of your yellow frame better */
+            width: 45%; 
+            min-width: 180px;
             text-align: center;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 10;
-            padding: 10px;
+            /* Pulls the text up into the yellow frame based on the image size */
+            margin-top: -2%; 
         }
 
-        h1 { 
-            color: #d25353; 
-            font-family: serif; 
-            font-size: 1.5em; /* Smaller for mobile */
-            margin: 0;
-        }
+        h1 { color: #d25353; font-family: serif; font-size: 1.2em; margin: 0; }
 
         h2, p { 
             color: #1b1b1d; 
             font-family: 'Poppins', sans-serif; 
-            font-size: 0.85em; /* Smaller for mobile */
-            line-height: 1.3;
-            margin: 5px 0;
+            font-size: 0.7em; /* Small font to fit the inner frame */
+            line-height: 1.2;
+            margin: 4px 0;
         }
 
-        h4 { font-size: 0.6em; color: #888; text-transform: uppercase; margin: 0; }
+        h4 { font-size: 0.5em; color: #888; text-transform: uppercase; margin: 0; }
 
         input {
-            width: 80%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;
+            width: 80%; padding: 5px; border: 1px solid #ccc; border-radius: 5px;
             font-family: 'Poppins', sans-serif;
-            font-size: 16px; /* Prevents iPhone zoom-in */
+            font-size: 16px; 
         }
 
         .start-btn, .submit-btn {
-            margin-top: 10px;
-            padding: 5px 15px;
+            margin-top: 5px;
+            padding: 4px 10px;
             font-family: 'Anonymous Pro', monospace; 
             background: white;
             border: 1px solid #1b1b1d;
             cursor: pointer;
-            font-size: 0.9em;
+            font-size: 0.8em;
         }
 
         .choice-btn {
-            width: 90%; margin: 3px 0; padding: 8px;
+            width: 90%; margin: 2px 0; padding: 5px;
             font-family: 'Poppins', sans-serif; font-weight: bold;
             background: white; border: 1px solid #d25353; cursor: pointer;
-            font-size: 0.85em;
+            font-size: 0.7em;
         }
 
         #next-btn {
             background: #d25353; color: white; border: none;
-            padding: 8px 15px; border-radius: 5px; cursor: pointer; margin-top: 8px;
+            padding: 5px 10px; border-radius: 5px; cursor: pointer; margin-top: 5px;
         }
 
         .hidden { display: none !important; }
 
-        /* Fixes the background for the final screen too */
+        /* Fix for the end screen background */
         #page-body[style*="image_f2a964_end.png"] {
-            background-size: 100% 100% !important;
+            background-size: contain !important;
         }
     </style>
 </head>
