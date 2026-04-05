@@ -9,12 +9,12 @@
     <script type="text/javascript">
         (function(){ emailjs.init("r9MBoUME4VUuwmJ_W"); })();
     </script>
-   <style>
+    <style>
         body, html {
             margin: 0; padding: 0; height: 100%; width: 100%;
-            background-color: #fdf6e3; /* Matches your cream background color */
+            background-color: #fdf6e3; /* Matches your cream background */
             background-image: url('image_f24b8d.png'); 
-            background-size: contain; /* Keeps the correct shape of the image */
+            background-size: contain; 
             background-repeat: no-repeat;
             background-position: center;
             display: flex;
@@ -24,25 +24,31 @@
         }
 
         .content-overlay {
-            /* This box now matches the shape of your yellow frame better */
-            width: 45%; 
-            min-width: 180px;
+            /* Width adjusted to fit inside the yellow box boundaries */
+            width: 38%; 
+            min-width: 150px;
             text-align: center;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 10;
-            /* Pulls the text up into the yellow frame based on the image size */
-            margin-top: -2%; 
+            /* This 2% margin pushes the text DOWN into the center of the frame */
+            margin-top: 2%; 
+            margin-left: 0;
         }
 
-        h1 { color: #d25353; font-family: serif; font-size: 1.2em; margin: 0; }
+        h1 { 
+            color: #d25353; 
+            font-family: serif; 
+            font-size: 1.1em; 
+            margin: 0;
+        }
 
         h2, p { 
             color: #1b1b1d; 
             font-family: 'Poppins', sans-serif; 
-            font-size: 0.7em; /* Small font to fit the inner frame */
+            font-size: 0.65em;
             line-height: 1.2;
             margin: 4px 0;
         }
@@ -50,9 +56,9 @@
         h4 { font-size: 0.5em; color: #888; text-transform: uppercase; margin: 0; }
 
         input {
-            width: 80%; padding: 5px; border: 1px solid #ccc; border-radius: 5px;
+            width: 85%; padding: 4px; border: 1px solid #ccc; border-radius: 4px;
             font-family: 'Poppins', sans-serif;
-            font-size: 16px; 
+            font-size: 16px; /* Prevents iPhone auto-zoom */
         }
 
         .start-btn, .submit-btn {
@@ -62,31 +68,30 @@
             background: white;
             border: 1px solid #1b1b1d;
             cursor: pointer;
-            font-size: 0.8em;
+            font-size: 0.75em;
         }
 
         .choice-btn {
-            width: 90%; margin: 2px 0; padding: 5px;
+            width: 95%; margin: 2px 0; padding: 4px;
             font-family: 'Poppins', sans-serif; font-weight: bold;
             background: white; border: 1px solid #d25353; cursor: pointer;
-            font-size: 0.7em;
+            font-size: 0.65em;
         }
 
         #next-btn {
             background: #d25353; color: white; border: none;
-            padding: 5px 10px; border-radius: 5px; cursor: pointer; margin-top: 5px;
+            padding: 4px 10px; border-radius: 4px; cursor: pointer; margin-top: 5px;
         }
 
         .hidden { display: none !important; }
 
-        /* Fix for the end screen background */
+        /* Ensure end screen background also stays contained */
         #page-body[style*="image_f2a964_end.png"] {
             background-size: contain !important;
         }
     </style>
 </head>
 <body id="page-body">
-
 
     <div class="content-overlay">
         <div id="intro-screen">
@@ -95,42 +100,36 @@
             <button class="start-btn" onclick="startApp()">Start</button>
         </div>
 
-
         <div id="category-splash" class="hidden">
             <h1 id="splash-title"></h1>
             <button class="start-btn" onclick="startCategory()">Tap to Start</button>
         </div>
 
-
         <div id="question-area" class="hidden">
             <h4 id="category-label"></h4>
             <h2 id="question-text"></h2>
-           
+            
             <div id="input-container">
                 <input type="text" id="answerInput" placeholder="Type here...">
                 <br>
                 <button class="submit-btn" onclick="submitAnswer()">Submit</button>
             </div>
 
-
             <div id="choice-container" class="hidden">
                 <button id="choice1" class="choice-btn" onclick="submitChoice(this.innerText)"></button>
                 <button id="choice2" class="choice-btn" onclick="submitChoice(this.innerText)"></button>
             </div>
 
-
             <div id="conversation-box" class="hidden">
-                <p id="p1-display" style="color: #53c997; font-weight: bold; font-size: 0.9em; margin: 2px;"></p>
-                <p id="p2-display" style="color: #53c997; font-weight: bold; font-size: 0.9em; margin: 2px;"></p>
+                <p id="p1-display" style="color: #53c997; font-weight: bold; font-size: 0.6em; margin: 1px;"></p>
+                <p id="p2-display" style="color: #53c997; font-weight: bold; font-size: 0.6em; margin: 1px;"></p>
                 <button id="next-btn" onclick="nextQuestion()">Next Card →</button>
             </div>
         </div>
 
-
         <div id="final-section" class="hidden">
-            <h2>Wish you all the best, ninong! 👑</h2>
-            <p>
-                Write something you want to say, if there's any:
+            <h2>Wish you all the best! 👑</h2>
+            <p>Write something you want to say, if there's any:
                 <br>
                 <small style="font-size: 0.8em; color: #666;">(Write "none" otherwise)</small>
             </p>
@@ -140,40 +139,36 @@
         </div>
     </div>
 
-
 <script>
     let current = 0;
-    let allResults = [];
-
+    let allResults = []; 
 
     const questions = [
         { cat: "Dugh Classic", sub: "Warm up muna!", q: "What is your favorite color?", p2: "Yellow and red" },
         { cat: "Dugh Classic", sub: "Warm up muna!", q: "Who is your favorite OPM singer/band?", p2: "Eraserheads" },
         { cat: "Dugh Classic", sub: "Warm up muna!", q: "Favorite OPM song?", p2: "Burnout" },
         { cat: "Dugh Classic", sub: "Warm up muna!", q: "Who is your celebrity crush?", p2: "Hamada Asahi" },
-        { cat: "Dugh Classic", sub: "Warm up muna!", q: "Comfort Food/Drinks?", p2: "Matcha Latte" },
+        { cat: "Dugh Classic", sub: "Warm up muna!", q: "Comfort food?", p2: "Matcha Latte" },
         { cat: "Dugh Classic", sub: "Warm up muna!", q: "Favorite fastfood?", p2: "KFC" },
         { cat: "Dugh Classic", sub: "Warm up muna!", q: "Favorite flower?", p2: "Sunflower" },
-        { cat: "BISOK experience", sub: "Share your core memories", q: "Favorite BISOK event so far?", p2: "PSP" },
-        { cat: "BISOK experience", sub: "Share your core memories", q: "Best experience in BISOK?", p2: "Being part of the Bisok events" },
-        { cat: "BISOK experience", sub: "Share your core memories", q: "One thing BISOK taught you?", p2: "malawak pag unawa" },
-        { cat: "Dugh Self", sub: "Something deep hihi", q: "Dream destination in the PH?", p2: "Palawan" },
+        { cat: "BISOK experience", sub: "Share core memories", q: "Favorite BISOK event so far?", p2: "PSP" },
+        { cat: "BISOK experience", sub: "Share core memories", q: "Best experience in BISOK?", p2: "Being part of Bisok events" },
+        { cat: "BISOK experience", sub: "Share core memories", q: "One thing BISOK taught you?", p2: "Pag unawa" },
+        { cat: "Dugh Self", sub: "Something deep hihi", q: "Dream place in the PH?", p2: "Palawan" },
         { cat: "Dugh Self", sub: "Something deep hihi", q: "People you vibe with?", p2: "Funny people" },
         { cat: "Dugh Self", sub: "Something deep hihi", q: "Biggest pet peeve?", p2: "People with a superiority complex" },
-        { cat: "Dugh Self", sub: "Something deep hihi", q: "What something that resonate with you?", p2: "Plant, just like plants, there are different versions of me every season." },
+        { cat: "Dugh Self", sub: "Something deep hihi", q: "What resonates with you?", p2: "Plant; just like plants, there are different versions of me every season." },
         { cat: "Dugh Self", sub: "Something deep hihi", q: "What are you passionate about?", p2: "Learning something new" },
         { cat: "Dis or Dat", sub: "Last few na", q: "Sponty or planned?", p2: "sponty", choices: ["Sponty", "Planned"] },
         { cat: "Dis or Dat", sub: "Last few na", q: "Yapper or listener?", p2: "listener", choices: ["Yapper", "Listener"] },
-        { cat: "Dis or Dat", sub: "Last few na", q: "Finance Chair or Resident Member?", p2: "Resident member, no experience po sa pagiging finchair", choices: ["Finance Chair", "Resident Member"] },
-        { id: "food_choice", cat: "Dis or Dat", sub: "Last few na", q: "Sweets or savory food?", p2: "Sweets", choices: ["Sweets", "Savory food"] }
+        { cat: "Dis or Dat", sub: "Last few na", q: "Finance Chair or Resident?", p2: "Resident member!", choices: ["Finance Chair", "Resident Member"] },
+        { id: "food_choice", cat: "Dis or Dat", sub: "Last few na", q: "Sweets or savory food?", p2: "Sweet", choices: ["Sweets", "Savory food"] }
     ];
-
 
     function startApp() {
         document.getElementById("intro-screen").classList.add("hidden");
         showSplash();
     }
-
 
     function showSplash() {
         document.getElementById("category-splash").classList.remove("hidden");
@@ -181,20 +176,18 @@
         document.getElementById("splash-title").innerHTML = questions[current].cat + "<br><small style='font-size:0.4em; color:gray;'>" + questions[current].sub + "</small>";
     }
 
-
     function startCategory() {
         document.getElementById("category-splash").classList.add("hidden");
         document.getElementById("question-area").classList.remove("hidden");
         showCard();
     }
 
-
     function showCard() {
         const item = questions[current];
         document.getElementById("category-label").innerText = item.cat;
         document.getElementById("question-text").innerText = item.q;
         document.getElementById("conversation-box").classList.add("hidden");
-       
+        
         if (item.choices) {
             document.getElementById("input-container").classList.add("hidden");
             document.getElementById("choice-container").classList.remove("hidden");
@@ -207,16 +200,14 @@
         }
     }
 
-
     function submitChoice(val) {
         if (questions[current].id === "food_choice") {
             const type = val === "Sweets" ? "sweet" : "savory";
-            questions.push({ cat: "Dis or Dat", sub: "Last few na", q: `What ${type} food do you like?`, p2: "sweets, donut" });
+            questions.push({ cat: "Dis or Dat", sub: "Last few na", q: `What ${type} food do you like?`, p2: "Donuts!" });
         }
         document.getElementById("answerInput").value = val;
         submitAnswer();
     }
-
 
     function submitAnswer() {
         const ans = document.getElementById("answerInput").value;
@@ -224,9 +215,8 @@
         document.getElementById("conversation-box").classList.remove("hidden");
         document.getElementById("p1-display").innerText = "Ninong 👑: " + ans;
         document.getElementById("p2-display").innerText = "Nanak Kim 💛: " + questions[current].p2;
-        allResults.push(`Q: ${questions[current].q}\nA: ${ans}`);
+        allResults.push(`Q: ${questions[current].q} | A: ${ans}`);
     }
-
 
     function nextQuestion() {
         current++;
@@ -239,21 +229,20 @@
         }
     }
 
-
     function sendFinalLetter() {
         const msg = document.getElementById("finalMessage").value;
         allResults.push(`FINAL MESSAGE: ${msg || "None"}`);
-        emailjs.send('service_ihyshde', 'template_6groaig', { all_answers: allResults.join("\n\n") })
+        emailjs.send('service_ihyshde', 'template_6groaig', { all_answers: allResults.join("\n") })
             .then(() => showFinalScreen()).catch(() => showFinalScreen());
     }
 
-
     function showFinalScreen() {
         const body = document.getElementById("page-body");
-        body.innerHTML = '';        
-        body.style.backgroundImage = "url('image_f2a964_end.png')";
-        body.style.backgroundSize = "cover";
+        body.innerHTML = '';         
+        body.style.backgroundImage = "url('image_f2a964_end.png')"; 
+        body.style.backgroundSize = "contain";
         body.style.backgroundPosition = "center";
+        body.style.backgroundColor = "#fdf6e3";
     }
 </script>
 </body>
