@@ -13,75 +13,84 @@
         body, html {
             margin: 0; padding: 0; height: 100%; width: 100%;
             background-color: #fdf6e3; 
-            /* Make sure your NEW tall image is named Image_bg.png on GitHub */
             background-image: url('Image_bg.png'); 
-            background-size: cover; 
+            background-size: contain; 
+            background-repeat: no-repeat;
             background-position: center;
             display: flex;
             justify-content: center; 
             align-items: center;
             overflow: hidden;
         }
-
+    
         .content-overlay {
-            width: 85%; 
-            max-width: 380px;
+            /* This width keeps the text inside the vertical lines of the yellow box */
+            width: 35%; 
+            min-width: 140px;
             text-align: center;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 10;
-            /* With a tall 1080x1920 BG, 0 margin usually centers it perfectly in the yellow box */
-            margin-top: 0; 
+            /* margin-top: 5% pushes the text down into the center of the frame */
+            margin-top: 5%; 
         }
-
-        h1 { color: #d25353; font-family: serif; font-size: 1.8em; margin: 0; }
-
+    
+        h1 { 
+            color: #d25353; 
+            font-family: serif; 
+            font-size: 1.1em; /* Much smaller so "Dugh Classic" doesn't overflow */
+            margin: 0;
+            line-height: 1;
+        }
+    
         h2, p { 
             color: #1b1b1d; 
             font-family: 'Poppins', sans-serif; 
-            font-size: 0.95em;
-            line-height: 1.4;
-            margin: 8px 0;
+            font-size: 0.6em; /* Small enough for long questions */
+            line-height: 1.2;
+            margin: 4px 0;
         }
-
-        h4 { font-size: 0.7em; color: #888; text-transform: uppercase; margin: 0; }
-
+    
+        h4 { font-size: 0.45em; color: #888; text-transform: uppercase; margin: 0; }
+    
         input {
-            width: 85%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;
+            width: 80%; 
+            padding: 4px; 
+            border: 1px solid #ccc; 
+            border-radius: 4px;
             font-family: 'Poppins', sans-serif;
-            font-size: 16px; 
+            font-size: 16px; /* Best for mobile inputs */
         }
-
+    
         .start-btn, .submit-btn {
-            margin-top: 10px;
-            padding: 8px 18px;
+            margin-top: 5px;
+            padding: 3px 10px;
             font-family: 'Anonymous Pro', monospace; 
             background: white;
             border: 1px solid #1b1b1d;
             cursor: pointer;
-            font-size: 1em;
+            font-size: 0.7em;
         }
-
+    
         .choice-btn {
-            width: 100%; margin: 5px 0; padding: 10px;
+            width: 90%; margin: 2px 0; padding: 4px;
             font-family: 'Poppins', sans-serif; font-weight: bold;
             background: white; border: 1px solid #d25353; cursor: pointer;
-            font-size: 0.9em;
-            border-radius: 5px;
+            font-size: 0.6em;
         }
-
+    
         #next-btn {
             background: #d25353; color: white; border: none;
-            padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 10px;
+            padding: 4px 10px; border-radius: 4px; cursor: pointer; margin-top: 5px;
         }
-
+    
         .hidden { display: none !important; }
-
-        /* End screen background styling */
+    
+        /* For the end screen */
         #page-body[style*="Image_bg_end.png"] {
-            background-size: cover !important;
+            background-size: contain !important;
         }
     </style>
 </head>
