@@ -24,80 +24,90 @@
         }
 
         .content-overlay {
-            /* This width keeps the text inside the vertical lines of the yellow box */
             width: 35%; 
-            min-width: 140px;
+            min-width: 280px;
             text-align: center;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 10;
-            /* margin-top: 5% pushes the text down into the center of the frame */
             margin-top: 5%; 
         }
 
-        h1 { 
-            color: #d25353; 
-            font-family: serif; 
-            font-size: 1em;          /* Dropped from 1.25em to 1em to fit one line */
-            margin: 0;
-            white-space: nowrap;     /* This forces the text to stay on one line */
-            letter-spacing: 0.5px;   /* Slight spacing for elegance */
-            margin-bottom: 5px;
+        h1 { color: #d25353; font-family: serif; font-size: 1.1em; margin-bottom: 5px; }
+        h2, p { color: #1b1b1d; font-family: 'Poppins', sans-serif; font-size: 0.65em; line-height: 1.3; margin: 4px 0; }
+
+        /* --- CATEGORY TILES GRID --- */
+        #category-tiles {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+            width: 100%;
         }
 
-        h2, p { 
-            color: #1b1b1d; 
-            font-family: 'Poppins', sans-serif; 
-            font-size: 0.6em; /* Small enough for long questions */
-            line-height: 1.2;
-            margin: 4px 0;
-        }
-
-        h4 { font-size: 0.45em; color: #888; text-transform: uppercase; margin: 0; }
-
-        input {
-            width: 80%; 
-            padding: 4px; 
-            border: 1px solid #ccc; 
-            border-radius: 4px;
+        .category-tile {
+            padding: 12px;
+            background-color: white;
+            color: #d25353;
+            border: 2px solid #d25353;
             font-family: 'Poppins', sans-serif;
-            font-size: 16px; /* Best for mobile inputs */
+            font-size: 0.6em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .category-tile:hover {
+            background-color: #d25353;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* --- COMPLETED TILE STATE --- */
+        .category-tile.completed {
+            background-color: #e0e0e0 !important;
+            color: #888 !important;
+            border: 2px solid #888 !important;
+            cursor: default !important;
+            pointer-events: none; /* Disables clicking */
         }
 
         .start-btn, .submit-btn {
-            margin-top: 5px;
-            padding: 3px 10px;
+            margin-top: 5px; padding: 5px 15px;
             font-family: 'Anonymous Pro', monospace; 
-            background: white;
-            border: 1px solid #1b1b1d;
-            cursor: pointer;
-            font-size: 0.7em;
+            background: white; border: 1px solid #1b1b1d;
+            cursor: pointer; font-size: 0.7em; transition: all 0.2s ease;
         }
 
         .choice-btn {
-            width: 90%; margin: 2px 0; padding: 4px;
+            width: 90%; margin: 2px 0; padding: 6px;
             font-family: 'Poppins', sans-serif; font-weight: bold;
             background: white; border: 1px solid #d25353; cursor: pointer;
-            font-size: 0.6em;
+            font-size: 0.6em; transition: all 0.2s ease;
         }
 
         #next-btn {
             background: #d25353; color: white; border: none;
-            padding: 4px 10px; border-radius: 4px; cursor: pointer; margin-top: 5px;
+            padding: 5px 12px; border-radius: 4px; cursor: pointer; margin-top: 8px;
+            font-size: 0.6em; transition: all 0.2s ease;
         }
 
+        .start-btn:hover, .submit-btn:hover, .choice-btn:hover, #next-btn:hover {
+            background-color: #d25353 !important; color: white !important;
+        }
+
+        input { width: 80%; padding: 6px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px; }
         .hidden { display: none !important; }
-
-        /* For the end screen */
-        #page-body[style*="Image_bg_end.png"] {
-            background-size: contain !important;
-        }
+        #category-label { font-size: 0.45em; color: #888; text-transform: uppercase; margin: 0; }
+        .end-screen-bg { background-image: url('Image_bg_end.png') !important; }
     </style>
 </head>
 <body id="page-body">
 
+    <audio id="clickSound" src="https://www.fesliyanstudios.com/play-mp3/387"></audio>
+    <audio id="bgMusic" src="always with me flute.mp3" loop></audio>
 
     <div class="content-overlay">
         <div id="intro-screen">
@@ -106,12 +116,11 @@
             <button class="start-btn" onclick="startApp()">Start</button>
         </div>
 
-
-        <div id="category-splash" class="hidden">
-            <h1 id="splash-title"></h1>
-            <button class="start-btn" onclick="startCategory()">Tap to Start</button>
+        <div id="category-screen" class="hidden">
+            <h1>Select a To is pic</h1>
+            <p>Choose a category to start the conversation-imnida.</p>
+            <div id="category-tiles"></div>
         </div>
-
 
         <div id="question-area" class="hidden">
             <h4 id="category-label"></h4>
@@ -123,89 +132,113 @@
                 <button class="submit-btn" onclick="submitAnswer()">Submit</button>
             </div>
 
-
             <div id="choice-container" class="hidden">
                 <button id="choice1" class="choice-btn" onclick="submitChoice(this.innerText)"></button>
                 <button id="choice2" class="choice-btn" onclick="submitChoice(this.innerText)"></button>
             </div>
 
-
             <div id="conversation-box" class="hidden">
-                <p id="p1-display" style="color: #53c997; font-weight: bold; font-size: 0.55em; margin: 2px;"></p>
-                <p id="p2-display" style="color: #53c997; font-weight: bold; font-size: 0.55em; margin: 2px;"></p>
+                <p id="p1-display" style="color: #a31f1f; font-weight: bold; font-size: 0.6em;"></p>
+                <p id="p2-display" style="color: #a31f1f; font-weight: bold; font-size: 0.6em;"></p>
                 <button id="next-btn" onclick="nextQuestion()">Next Card →</button>
             </div>
         </div>
 
-
         <div id="final-section" class="hidden">
             <h2>Wish you all the best, ninong! 👑</h2>
-            <p>
-                Write something you want to say, if there's any:
-                <br>
-                <small style="font-size: 0.8em; color: #666;">(Write "none" otherwise)</small>
-            </p>
+            <p>Write something you want to say, if there's any:</p>
             <input type="text" id="finalMessage" placeholder="Write here...">
             <br>
             <button class="submit-btn" onclick="sendFinalLetter()">Send Letter</button>
         </div>
     </div>
 
-
 <script>
-    let current = 0;
+    let currentIdx = 0;
+    let currentCategoryQuestions = [];
+    let completedCats = [];
     let allResults = [];
-
 
     const questions = [
         { cat: "Dugh Classic", sub: "Warm up muna!", q: "What is your favorite color?", p2: "Yellow and red" },
         { cat: "Dugh Classic", sub: "Warm up muna!", q: "Who is your favorite OPM singer/band?", p2: "Eraserheads" },
         { cat: "Dugh Classic", sub: "Warm up muna!", q: "Favorite OPM song?", p2: "Burnout" },
-        { cat: "Dugh Classic", sub: "Warm up muna!", q: "Who is your celebrity crush?", p2: "Hamada Asahi" },
-        { cat: "Dugh Classic", sub: "Warm up muna!", q: "Comfort Food/Drinks?", p2: "Matcha Latte" },
+        { cat: "Dugh Classic", sub: "Warm up muna!", q: "Who is your celebrity crush?", p2: "Hamada Asahi and Andres Mulach" },
+        { cat: "Dugh Classic", sub: "Warm up muna!", q: "What is your go-to comfort food?", p2: "Matcha Latte & Takoyaki" },
         { cat: "Dugh Classic", sub: "Warm up muna!", q: "Favorite fastfood?", p2: "KFC" },
         { cat: "Dugh Classic", sub: "Warm up muna!", q: "Favorite flower?", p2: "Sunflower" },
-        { cat: "BISOK experience", sub: "Share your core memories", q: "Favorite BISOK event so far?", p2: "PSP" },
-        { cat: "BISOK experience", sub: "Share your core memories", q: "Best experience in BISOK?", p2: "Being part of the Bisok events" },
-        { cat: "BISOK experience", sub: "Share your core memories", q: "One thing BISOK taught you?", p2: "malawak na pag unawa" },
-        { cat: "Dugh Self", sub: "Something deep hihi", q: "Dream destination in the PH?", p2: "Palawan" },
+        { cat: "BISOK experience", sub: "Share your core memories", q: "What part of BISOK are you most passionate about?", p2: "Community service" },
+        { cat: "BISOK experience", sub: "Share your core memories", q: "What is something you are proud of accomplishing?", p2: "Being a resident member" },
+        { cat: "BISOK experience", sub: "Share your core memories", q: "During your stay in BISOK, what's something you've learned the hard way?", p2: "That if you want something, you have to work for it" },
+        { cat: "BISOK experience", sub: "Share your core memories", q: "During your stay in BISOK, what's the hardest thing you've ever done?", p2: "So far, socializing with everyone" },
+        { cat: "Dugh Self", sub: "Something deep hihi", q: "If you could travel anywhere in the Philippines, where would you go?", p2: "Palawan" },
         { cat: "Dugh Self", sub: "Something deep hihi", q: "People you vibe with?", p2: "Funny or Chill people" },
-        { cat: "Dugh Self", sub: "Something deep hihi", q: "Biggest pet peeve?", p2: "People with a superiority complex" },
+        { cat: "Dugh Self", sub: "Something deep hihi", q: "What's one rule you try to live by?", p2: "Always try to be kind" },
         { cat: "Dugh Self", sub: "Something deep hihi", q: "What something that resonate with you?", p2: "Plant, just like plants, there are different versions of me every season." },
-        { cat: "Dugh Self", sub: "Something deep hihi", q: "What are you passionate about?", p2: "Learning something new" },
+        { cat: "Dugh Self", sub: "Something deep hihi", q: "What is one skill you'd love to learn?", p2: "The ability to speak many languages" },
         { cat: "Dis or Dat", sub: "Last few na", q: "Sponty or planned?", p2: "sponty", choices: ["Sponty", "Planned"] },
+        { cat: "Dis or Dat", sub: "Last few na", q: "Night owl or Morning person?", p2: "Night owl", choices: ["Night owl", "Morning Person"] },
         { cat: "Dis or Dat", sub: "Last few na", q: "Yapper or listener?", p2: "listener", choices: ["Yapper", "Listener"] },
-        { cat: "Dis or Dat", sub: "Last few na", q: "Finance Chair or Resident Member?", p2: "Resident member, no experience po sa pagiging finchair", choices: ["Finance Chair", "Resident Member"] },
+        { cat: "Dis or Dat", sub: "Last few na", q: "Finance Chair or Resident Member?", p2: "Resident member, this question is for you lang po eheheh", choices: ["Finance Chair", "Resident Member"] },
         { id: "food_choice", cat: "Dis or Dat", sub: "Last few na", q: "Sweets or savory food?", p2: "Sweets", choices: ["Sweets", "Savory food"] }
+
     ];
 
+    // Get unique categories from the question list
+    const categories = [...new Set(questions.map(item => item.cat))];
+
+    function playSound() {
+        const sound = document.getElementById("clickSound");
+        sound.currentTime = 0; sound.play().catch(()=>{});
+    }
 
     function startApp() {
+        playSound(); // Your existing click sound
+        
+        // Start the background music
+        const bgMusic = document.getElementById("bgMusic");
+        bgMusic.play().catch(e => console.log("Music playback blocked:", e));
+        
         document.getElementById("intro-screen").classList.add("hidden");
-        showSplash();
+        showCategoryMenu();
     }
 
+    function showCategoryMenu() {
+        const screen = document.getElementById("category-screen");
+        const container = document.getElementById("category-tiles");
+        screen.classList.remove("hidden");
+        container.innerHTML = "";
 
-    function showSplash() {
-        document.getElementById("category-splash").classList.remove("hidden");
-        document.getElementById("question-area").classList.add("hidden");
-        document.getElementById("splash-title").innerHTML = questions[current].cat + "<br><small style='font-size:0.4em; color:gray;'>" + questions[current].sub + "</small>";
+        categories.forEach(cat => {
+            const btn = document.createElement("button");
+            btn.className = "category-tile";
+            // If category is done, change color and disable
+            if (completedCats.includes(cat)) {
+                btn.classList.add("completed");
+                btn.innerText = cat + " (Done)";
+            } else {
+                btn.innerText = cat;
+                btn.onclick = () => selectCategory(cat);
+            }
+            container.appendChild(btn);
+        });
     }
 
-
-    function startCategory() {
-        document.getElementById("category-splash").classList.add("hidden");
+    function selectCategory(catName) {
+        playSound();
+        currentCategoryQuestions = questions.filter(q => q.cat === catName);
+        currentIdx = 0;
+        document.getElementById("category-screen").classList.add("hidden");
         document.getElementById("question-area").classList.remove("hidden");
         showCard();
     }
 
-
     function showCard() {
-        const item = questions[current];
+        const item = currentCategoryQuestions[currentIdx];
         document.getElementById("category-label").innerText = item.cat;
         document.getElementById("question-text").innerText = item.q;
         document.getElementById("conversation-box").classList.add("hidden");
-       
+        
         if (item.choices) {
             document.getElementById("input-container").classList.add("hidden");
             document.getElementById("choice-container").classList.remove("hidden");
@@ -218,53 +251,62 @@
         }
     }
 
-
     function submitChoice(val) {
-        if (questions[current].id === "food_choice") {
-            const type = val === "Sweets" ? "sweet" : "savory";
-            questions.push({ cat: "Dis or Dat", sub: "Last few na", q: `What ${type} food do you like?`, p2: "sweets, donut" });
-        }
         document.getElementById("answerInput").value = val;
         submitAnswer();
     }
 
-
     function submitAnswer() {
         const ans = document.getElementById("answerInput").value;
         if (!ans) return;
+        playSound();
         document.getElementById("conversation-box").classList.remove("hidden");
+        document.getElementById("input-container").classList.add("hidden");
+        document.getElementById("choice-container").classList.add("hidden");
         document.getElementById("p1-display").innerText = "Ninong 👑: " + ans;
-        document.getElementById("p2-display").innerText = "Nanak Kim 💛: " + questions[current].p2;
-        allResults.push(`Q: ${questions[current].q}\nA: ${ans}`);
+        document.getElementById("p2-display").innerText = "Nanak Kim 💛: " + currentCategoryQuestions[currentIdx].p2;
+        allResults.push(`Q: ${currentCategoryQuestions[currentIdx].q}\nA: ${ans}`);
     }
 
-
     function nextQuestion() {
-        current++;
-        if (current < questions.length) {
-            if (questions[current].cat !== questions[current-1].cat) showSplash();
-            else showCard();
+        playSound();
+        currentIdx++;
+        if (currentIdx < currentCategoryQuestions.length) {
+            showCard();
         } else {
+            // Category Finished!
+            completedCats.push(currentCategoryQuestions[0].cat);
             document.getElementById("question-area").classList.add("hidden");
-            document.getElementById("final-section").classList.remove("hidden");
+            
+            if (completedCats.length === categories.length) {
+                document.getElementById("final-section").classList.remove("hidden");
+            } else {
+                showCategoryMenu();
+            }
         }
     }
 
-
     function sendFinalLetter() {
+        playSound();
         const msg = document.getElementById("finalMessage").value;
         allResults.push(`FINAL MESSAGE: ${msg || "None"}`);
         emailjs.send('service_ihyshde', 'template_6groaig', { all_answers: allResults.join("\n\n") })
             .then(() => showFinalScreen()).catch(() => showFinalScreen());
     }
 
+   function showFinalScreen() {
+        // Stop the background music
+        const bgMusic = document.getElementById("bgMusic");
+        bgMusic.pause();
+        bgMusic.currentTime = 0;
 
-    function showFinalScreen() {
+        // Play the "Bye have a great Time" sound
+        const finalAudio = new Audio('Bye have a great Time.mp3');
+        finalAudio.play().catch(()=>{});
+
         const body = document.getElementById("page-body");
-        body.innerHTML = '';        
-        body.style.backgroundImage = "url('Image_bg_end.png')";
-        body.style.backgroundSize = "cover";
-        body.style.backgroundPosition = "center";
+        body.innerHTML = '<div style="text-align:center; z-index:10;"><h1>Letter Sent! ✉️</h1><p>Thank you for playing, Ninong!</p></div>';        
+        body.classList.add('end-screen-bg');
     }
 </script>
 </body>
